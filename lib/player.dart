@@ -23,9 +23,15 @@ class Player {
     }
   }
 
-  void playNote({@required Note note, int octave = 5}) async {
+  void startNote({@required Note note, int octave = 5}) async {
     int midi = _convertToMidi(note, octave);
     FlutterMidi.playMidiNote(midi: midi)
+        .then((dynamic message) => print(message))
+        .catchError((dynamic e) => print(e));
+  }
+
+  void stopNote({@required Note note, int octave = 5}) async {
+    FlutterMidi.stopMidiNote()
         .then((dynamic message) => print(message))
         .catchError((dynamic e) => print(e));
   }

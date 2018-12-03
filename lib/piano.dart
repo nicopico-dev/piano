@@ -9,12 +9,13 @@ class PianoScreen extends StatelessWidget {
 
     return Container(
       color: Theme.of(context).backgroundColor,
-      child: Padding(
+      child: Container(
         padding: EdgeInsets.only(
           left: windowPadding.left,
           right: windowPadding.right,
           bottom: windowPadding.bottom,
         ),
+        color: Colors.grey,
         child: LayoutBuilder(
           builder: (context, box) {
             var availableWidth = box.maxWidth;
@@ -97,7 +98,9 @@ class _PianoKey extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       child: InkWell(
-        onTap: () => _playNote(context),
+        onTapDown: (details) => _onPianoKeyDown(context),
+        onTapCancel: () => _onPianoKeyUp(context),
+        onTap: () => _onPianoKeyUp(context),
         child: Container(
           width: width,
           decoration: BoxDecoration(
@@ -111,8 +114,12 @@ class _PianoKey extends StatelessWidget {
     );
   }
 
-  void _playNote(BuildContext context) {
-    PlayerWidget.of(context).playNote(note: note, octave: octave);
+  void _onPianoKeyDown(BuildContext context) {
+    PlayerWidget.of(context).startNote(note: note, octave: octave);
+  }
+
+  void _onPianoKeyUp(BuildContext context) {
+    PlayerWidget.of(context).stopNote(note: note, octave: octave);
   }
 }
 
@@ -135,7 +142,9 @@ class _SharpKey extends _PianoKey {
         child: Material(
           elevation: 4.0,
           child: InkWell(
-            onTap: () => _playNote(context),
+            onTapDown: (details) => _onPianoKeyDown(context),
+            onTapCancel: () => _onPianoKeyUp(context),
+            onTap: () => _onPianoKeyUp(context),
             child: Ink(
               decoration: BoxDecoration(
                 border: Border.all(color: Colors.black87),
