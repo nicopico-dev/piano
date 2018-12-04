@@ -4,7 +4,8 @@ import 'package:flutter/services.dart';
 import 'package:meta/meta.dart';
 
 class FlutterMidi {
-  static const MethodChannel _channel = MethodChannel('flutter_midi');
+  static const MethodChannel _channel =
+      MethodChannel('fr.nicopico.piano/flutter_midi');
 
   /// Needed so that the sound font is loaded
   /// On iOS make sure to include the sound_font.SF2 in the Runner folder.
