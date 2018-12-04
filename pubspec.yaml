@@ -16,7 +16,8 @@ dependencies:
   flutter:
     sdk: flutter
 
-  flutter_midi: ^0.0.4
+  flutter_midi: 
+    path: flutter_midi/
 
 dev_dependencies:
   flutter_test:
