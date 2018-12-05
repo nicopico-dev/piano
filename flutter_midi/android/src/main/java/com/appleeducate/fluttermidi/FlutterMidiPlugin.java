@@ -1,6 +1,5 @@
 package com.appleeducate.fluttermidi;
 
-import android.util.Log;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
@@ -14,6 +13,11 @@ public class FlutterMidiPlugin implements MethodCallHandler {
     private static final String METHOD_PREPARE = "prepare_midi";
     private static final String METHOD_START_NOTE = "play_midi_note";
     private static final String METHOD_STOP_NOTE = "stop_midi_note";
+
+    private static final byte MIDI_COMMAND_NOTE_ON = (byte) 0x90;
+    private static final byte MIDI_COMMAND_NOTE_OFF = (byte) 0x80;
+    private static final byte MIDI_VELOCITY_MAX = (byte) 0x7F;
+    private static final byte MIDI_VELOCITY_MIN = (byte) 0x00;
 
     private final MidiDriver midiDriver;
 
@@ -35,36 +39,50 @@ public class FlutterMidiPlugin implements MethodCallHandler {
                 result.success(null);
                 break;
 
-            case METHOD_START_NOTE: {
-                Integer note = call.argument("note");
-                if (note != null) {
-                    Log.i("PIANO", "Play note " + note);
-                    String strNote = String.valueOf(note);
-                    byte[] event = {
-                            (byte) (0x90 | 0x00),// 0x90 = note On, 0x00 = channel 1
-                            Byte.parseByte(strNote), // 0x3C = middle C
-                            (byte) 0x7F, // 0x7F = the maximum velocity (127)
-                    };
-                    midiDriver.write(event);
+            case METHOD_START_NOTE:
+                try {
+                    midiDriver.write(new byte[]{
+                            MIDI_COMMAND_NOTE_ON,
+                            getMidiNote(call),
+                            MIDI_VELOCITY_MAX
+                    });
                     result.success(null);
                 }
+                catch (InvalidNoteException e) {
+                    result.error("MISSING_ARGUMENT", "The note argument is mandatory", null);
+                }
                 break;
-            }
-            case METHOD_STOP_NOTE: {
-                // Construct a note OFF message for the middle C at minimum velocity on channel
-                byte[] event = {
-                        (byte) (0x80 | 0x00), // 0x80 = note Off, 0x00 = channel 1
-                        (byte) 0x3C, // 0x3C = middle C
-                        (byte) 0x00, // 0x00 = the minimum velocity (0)
-                };
-                midiDriver.write(event);
-                result.success(null);
+
+            case METHOD_STOP_NOTE:
+                try {
+                    midiDriver.write(new byte[]{
+                            MIDI_COMMAND_NOTE_OFF,
+                            getMidiNote(call),
+                            MIDI_VELOCITY_MIN
+                    });
+                    result.success(null);
+                }
+                catch (InvalidNoteException e) {
+                    result.error("MISSING_ARGUMENT", "The note argument is mandatory", null);
+                }
                 break;
-            }
+
 
             default:
                 result.notImplemented();
                 break;
         }
+    }
+
+    private static byte getMidiNote(MethodCall call) throws InvalidNoteException {
+        Integer note = call.argument("note");
+        if (note != null) {
+            return Byte.parseByte(String.valueOf(note));
+        } else {
+            throw new InvalidNoteException();
+        }
+    }
+
+    private static class InvalidNoteException extends Exception {
     }
 }
