@@ -8,7 +8,7 @@ public class SwiftFlutterMidiPlugin: NSObject, FlutterPlugin {
   var au: AudioUnitMIDISynth!
 
   public static func register(with registrar: FlutterPluginRegistrar) {
-    let channel = FlutterMethodChannel(name: "flutter_midi", binaryMessenger: registrar.messenger())
+    let channel = FlutterMethodChannel(name: "fr.nicopico.piano/flutter_midi", binaryMessenger: registrar.messenger())
     let instance = SwiftFlutterMidiPlugin()
     registrar.addMethodCallDelegate(instance, channel: channel)
   }
