@@ -16,8 +16,7 @@ class Player {
 
   void _initialize() async {
     if (!_initialized) {
-      var message = await FlutterMidi.prepare();
-      print("MIDI: $message");
+      await FlutterMidi.prepare().catchError((dynamic e) => print(e));
     } else {
       print("Skipped MIDI initialization");
     }
