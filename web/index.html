@@ -54,5 +54,20 @@
       });
     });
   </script>
+  <script
+          src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.39/Tone.js"
+          type="application/javascript"
+  ></script>
+  <script>
+    const synth = new Tone.PolySynth().toDestination();
+    function playNote(note, duration) {
+      Tone.context.resume();
+      synth.triggerAttack(note, duration ?? Tone.context.currentTime);
+    }
+    function stopNote(note) {
+      Tone.context.resume();
+      synth.triggerRelease(note, Tone.context.currentTime);
+    }
+  </script>
 </body>
 </html>

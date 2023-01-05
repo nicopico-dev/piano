@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:piano/note.dart';
-import 'package:piano/player.dart';
+import 'package:piano/player/player.dart';
 
 class PianoScreen extends StatelessWidget {
   @override

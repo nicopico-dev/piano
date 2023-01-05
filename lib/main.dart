@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:piano/piano.dart';
-import 'package:piano/player.dart';
+import 'package:piano/player/player.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,7 +29,7 @@ class PianoApp extends StatelessWidget {
         backgroundColor: Colors.grey[100],
       ),
       home: FutureBuilder<Player>(
-        future: Player.create(),
+        future: createPlayer(),
         builder: (context, snap) {
           switch (snap.connectionState) {
             case ConnectionState.done:
