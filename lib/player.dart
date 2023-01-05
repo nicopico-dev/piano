@@ -49,7 +49,7 @@ class PlayerWidget extends InheritedWidget {
       : super(key: key, child: child);
 
   static Player of(BuildContext context) {
-    return (context.inheritFromWidgetOfExactType(PlayerWidget) as PlayerWidget)
+    return (context.dependOnInheritedWidgetOfExactType<PlayerWidget>())
         .player;
   }
 

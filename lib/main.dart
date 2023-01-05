@@ -3,19 +3,21 @@ import 'package:flutter/services.dart';
 import 'package:piano/piano.dart';
 import 'package:piano/player.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
   // Disable the status bar and the system bar
-  // Then lock the app in landscape orientation
-  SystemChrome.setEnabledSystemUIOverlays([])
-      .then(
-        (_) => SystemChrome.setPreferredOrientations(
-              [
-                DeviceOrientation.landscapeLeft,
-                DeviceOrientation.landscapeRight,
-              ],
-            ),
-      )
-      .then((_) => runApp(PianoApp()));
+  await SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge, overlays: []);
+  // Lock the app in landscape orientation
+  await SystemChrome.setPreferredOrientations(
+    [
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+    ],
+  );
+
+  // Launch the app itself
+  runApp(PianoApp());
 }
 
 class PianoApp extends StatelessWidget {
