@@ -3,13 +3,13 @@ import 'package:flutter/services.dart';
 import 'package:flutter_midi/flutter_midi.dart';
 import 'package:piano/note.dart';
 
-import 'player.dart';
+import 'midi_utils.dart';
 
-class MobilePlayer implements Player {
+class Player {
   static const SF2_ASSET_FILE = 'assets/Piano.sf2';
   final FlutterMidi _flutterMidi;
 
-  MobilePlayer() : _flutterMidi = FlutterMidi() {
+  Player() : _flutterMidi = FlutterMidi() {
     _initialize();
   }
 
@@ -19,13 +19,11 @@ class MobilePlayer implements Player {
     await _flutterMidi.prepare(sf2: sf2Bytes).catchError((e) => print(e));
   }
 
-  @override
   void startNote({@required Note note, int octave = 5}) async {
     int midi = convertToMidi(note, octave);
     _flutterMidi.playMidiNote(midi: midi).catchError((dynamic e) => print(e));
   }
 
-  @override
   void stopNote({@required Note note, int octave = 5}) async {
     int midi = convertToMidi(note, octave);
     _flutterMidi.stopMidiNote(midi: midi).catchError((dynamic e) => print(e));

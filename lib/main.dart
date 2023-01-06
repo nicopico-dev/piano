@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:piano/piano.dart';
+import 'package:piano/player_widget.dart';
 import 'package:piano/player/player.dart';
 
 void main() async {
