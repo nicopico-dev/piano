@@ -14,7 +14,6 @@ class Player {
   }
 
   void _initialize() async {
-    await _flutterMidi.unmute();
     ByteData sf2Bytes = await rootBundle.load(SF2_ASSET_FILE);
     await _flutterMidi.prepare(sf2: sf2Bytes).catchError((e) => print(e));
   }
